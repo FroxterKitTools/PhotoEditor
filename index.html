@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Photo Editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+<div class="wrap">
+<h1>Photo editor</h1>
+<p class="sub">Crop, resize, rotate, filter, add text and stickers, or draw on your photo. Everything runs in your browser; nothing is uploaded.</p>
+<div class="app">
+<aside class="glass panel" aria-label="Tools">
+ <details class="sec" data-t="crop"><summary>Crop</summary><div class="in">
+  <div><label class="lbl" for="cr">Aspect ratio <span class="hint" id="ci"></span></label>
+  <select id="cr"><option value="free">Free (any size)</option><option value="orig">Original</option><option>1:1</option><option>4:3</option><option>3:2</option><option>16:9</option><option>3:4</option><option>9:16</option></select></div>
+  <div class="row"><button class="primary" id="ca">Apply crop</button><button id="cc">Reset box</button></div>
+  <div class="hint">Drag the box to move it, or a handle to resize.</div></div></details>
+ <details class="sec" data-t="move"><summary>Resize</summary><div class="in">
+  <div class="row"><div><label class="lbl" for="rw">Width px</label><input type="number" id="rw" min="1" max="6000"></div><div><label class="lbl" for="rh">Height px</label><input type="number" id="rh" min="1" max="6000"></div></div>
+  <div class="row3"><label class="row3"><input type="checkbox" id="lk" checked> Lock ratio</label></div>
+  <div><label class="lbl" for="rp">Percentage</label><input type="number" id="rp" min="1" max="400" value="100"></div>
+  <button class="primary" id="rap">Apply resize</button></div></details>
+ <details class="sec" data-t="move"><summary>Rotate &amp; flip</summary><div class="in"><div class="row">
+  <button id="rl">&#8630; Rotate left</button><button id="rr">Rotate right &#8631;</button><button id="fh">&#8596; Flip horizontal</button><button id="fv">&#8597; Flip vertical</button></div></div></details>
+ <details class="sec" data-t="move" open><summary>Filters &amp; effects</summary><div class="in">
+  <div class="row3" id="pre"></div><div id="adj" style="display:grid;gap:10px"></div></div></details>
+ <details class="sec" data-t="move"><summary>Text &amp; stickers</summary><div class="in">
+  <button class="primary" id="at">Add text</button>
+  <div class="em" id="em"></div>
+  <div id="lp" hidden style="display:none;gap:12px">
+   <div id="tx" style="display:grid;gap:12px">
+    <textarea id="tt" aria-label="Text"></textarea>
+    <div class="row"><select id="tf" aria-label="Font"><option value="Sora, sans-serif">Sora</option><option value="Georgia, serif">Georgia</option><option value="'Courier New', monospace">Courier</option><option value="Impact, sans-serif">Impact</option><option value="Arial, sans-serif">Arial</option><option value="'Brush Script MT', cursive">Script</option></select>
+    <select id="tw" aria-label="Weight"><option value="300">Light</option><option value="400">Regular</option><option value="600">Semibold</option><option value="800">Bold</option></select></div>
+    <div class="row"><input type="color" id="tc" value="#ffffff" aria-label="Text color"><div class="row3"><button class="al" data-a="left">L</button><button class="al" data-a="center">C</button><button class="al" data-a="right">R</button></div></div>
+   </div>
+   <div><label class="lbl" for="tz">Size</label><input type="range" id="tz" min="8" max="800"></div>
+   <div><label class="lbl" for="to">Opacity</label><input type="range" id="to" min="5" max="100"></div>
+   <button id="td">Delete layer</button>
+  </div>
+  <div class="hint">Drag layers on the photo to move them.</div></div></details>
+ <details class="sec" data-t="draw"><summary>Draw</summary><div class="in">
+  <div class="row"><input type="color" id="bc" value="#ffffff" aria-label="Brush color"><label class="row3"><input type="checkbox" id="er"> Eraser</label></div>
+  <div><label class="lbl" for="bs">Stroke width <span class="hint" id="bv">12</span></label><input type="range" id="bs" min="1" max="120" value="12"></div>
+  <div class="hint">Drag on the photo to draw. Hold Space or use the middle mouse button to pan.</div></div></details>
+ <div class="exp" style="display:grid;gap:12px;padding:4px 2px 0">
+  <div class="row"><div><label class="lbl" for="fmt">Format</label><select id="fmt"><option value="image/png">PNG</option><option value="image/jpeg">JPEG</option><option value="image/webp">WEBP</option></select></div>
+  <div id="qw" hidden><label class="lbl" for="q">Quality <span class="hint" id="qv">90</span></label><input type="range" id="q" min="10" max="100" value="90"></div></div>
+  <button class="primary" id="dl">Download image</button><div class="hint" id="ei"></div></div>
+</aside>
+<main class="glass ws">
+ <div class="bar">
+  <button id="open">Open image</button><button id="undo" disabled aria-label="Undo">&#8630; Undo</button><button id="redo" disabled aria-label="Redo">Redo &#8631;</button><span class="sp"></span>
+  <button id="zo" aria-label="Zoom out">&minus;</button><span class="hint" id="zl" style="min-width:44px;text-align:center">100%</span><button id="zi" aria-label="Zoom in">+</button><button id="fit">Fit</button>
+ </div>
+ <div class="vp" id="vp" data-mode="move">
+  <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose an image or drop one here"><strong>Drop a photo here</strong><span>or click to browse. You can also paste from your clipboard.</span><span>JPG, PNG, WEBP</span></div>
+  <div id="pz" hidden><canvas id="cv"></canvas>
+   <div class="sel" id="cb" hidden><i class="hd" data-h="nw"></i><i class="hd" data-h="n"></i><i class="hd" data-h="ne"></i><i class="hd" data-h="e"></i><i class="hd" data-h="se"></i><i class="hd" data-h="s"></i><i class="hd" data-h="sw"></i><i class="hd" data-h="w"></i></div></div>
+ </div>
+</main>
+</div></div>
+<input type="file" id="file" accept="image/png,image/jpeg,image/webp" hidden>
+<script src="script.js"></script>
+</body>
+</html>
